@@ -1,4 +1,4 @@
-#include<stdio.h>
+urn 0;#include<stdio.h>
 
 int main() {
     int i, j, n, bu[10], wa[10], tat[10], t, ct[10], max;
@@ -54,4 +54,6 @@ int main() {
     }
 
     getchar(); // to pause the output before exit
+retun 0;
+}
     
