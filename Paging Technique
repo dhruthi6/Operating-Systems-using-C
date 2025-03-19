@@ -1,0 +1,43 @@
+#include<stdio.h>
+
+int main() {
+    int ms, ps, nop, np, rempages, i, j, x, y, offset, pa;
+    int s[10], fno[10][20];
+
+    printf("Enter memory size and page size: ");
+    scanf("%d %d", &ms, &ps);
+    
+    nop = ms / ps;
+    printf("Available pages: %d\n", nop);
+    
+    printf("Enter number of processes: ");
+    scanf("%d", &np);
+
+    rempages = nop;
+    for (i = 1; i <= np; i++) {
+        printf("Pages required for process %d: ", i);
+        scanf("%d", &s[i]);
+
+        if (s[i] > rempages) {
+            printf("Memory Full\n");
+            return 0;
+        }
+        rempages -= s[i];
+
+        printf("Enter page table for process %d: ", i);
+        for (j = 0; j < s[i]; j++)
+            scanf("%d", &fno[i][j]);
+    }
+
+    printf("Enter process no, page no, and offset: ");
+    scanf("%d %d %d", &x, &y, &offset);
+
+    if (x > np || y >= s[x] || offset >= ps)
+        printf("Invalid input\n");
+    else {
+        pa = fno[x][y] * ps + offset;
+        printf("Physical Address: %d\n", pa);
+    }
+
+    return 0;
+}
