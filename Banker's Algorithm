@@ -1,0 +1,67 @@
+#include <stdio.h>
+
+#define MAX 10
+
+void calculateNeed(int need[MAX][MAX], int max[MAX][MAX], int allocated[MAX][MAX], int p, int r) {
+    for (int i = 0; i < p; i++)
+        for (int j = 0; j < r; j++)
+            need[i][j] = max[i][j] - allocated[i][j];
+}
+
+int isSafeState(int p, int r, int available[MAX], int max[MAX][MAX], int allocated[MAX][MAX]) {
+    int need[MAX][MAX], work[MAX], finish[MAX] = {0}, safeSeq[MAX], count = 0;
+
+    calculateNeed(need, max, allocated, p, r);
+    for (int i = 0; i < r; i++) work[i] = available[i];
+
+    while (count < p) {
+        int found = 0;
+        for (int i = 0; i < p; i++) {
+            if (!finish[i]) {
+                int j;
+                for (j = 0; j < r; j++)
+                    if (need[i][j] > work[j]) break;
+
+                if (j == r) {
+                    for (int k = 0; k < r; k++) work[k] += allocated[i][k];
+                    safeSeq[count++] = i;
+                    finish[i] = 1;
+                    found = 1;
+                }
+            }
+        }
+        if (!found) {
+            printf("System is in an unsafe state. Deadlock may occur.\n");
+            return 0;
+        }
+    }
+
+    printf("System is in a safe state.\nSafe sequence: ");
+    for (int i = 0; i < p; i++) printf("P%d ", safeSeq[i]);
+    printf("\n");
+    return 1;
+}
+
+int main() {
+    int p, r, allocated[MAX][MAX], max[MAX][MAX], available[MAX];
+
+    printf("Enter number of processes and resources: ");
+    scanf("%d %d", &p, &r);
+
+    printf("Enter allocated resource matrix:\n");
+    for (int i = 0; i < p; i++)
+        for (int j = 0; j < r; j++)
+            scanf("%d", &allocated[i][j]);
+
+    printf("Enter maximum resource matrix:\n");
+    for (int i = 0; i < p; i++)
+        for (int j = 0; j < r; j++)
+            scanf("%d", &max[i][j]);
+
+    printf("Enter available resources: ");
+    for (int i = 0; i < r; i++)
+        scanf("%d", &available[i]);
+
+    isSafeState(p, r, available, max, allocated);
+    return 0;
+}
