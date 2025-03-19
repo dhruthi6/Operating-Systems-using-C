@@ -1,0 +1,32 @@
+#include<stdio.h>
+int main() {
+    int rs[50], a[20], cntr[20] = {0}, m, f, i, j, min, pf = 0;
+    printf("\nEnter number of page references: ");
+    scanf("%d", &m);
+    printf("\nEnter the reference string: ");
+    for(i = 0; i < m; i++) scanf("%d", &rs[i]);
+    printf("\nEnter the number of frames: ");
+    scanf("%d", &f);
+    for(i = 0; i < f; i++) a[i] = -1;
+    
+    printf("\nPage Replacement Process:\n");
+    for(i = 0; i < m; i++) {
+        for(j = 0; j < f; j++) {
+            if(rs[i] == a[j]) {
+                cntr[j]++;
+                break;
+            }
+        }
+        if(j == f) {
+            min = 0;
+            for(j = 1; j < f; j++)
+                if(cntr[j] < cntr[min]) min = j;
+            a[min] = rs[i];
+            cntr[min] = 1;
+            pf++;
+        }
+        for(j = 0; j < f; j++) printf("\t%d", a[j]);
+        printf("\tPF NO.%d\n", pf);
+    }
+    printf("\nTotal number of page faults: %d", pf);
+}
